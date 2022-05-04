@@ -2,7 +2,7 @@
 // @name         BCNotify
 // @author       Tumble
 // @namespace    https://bcmc.ga/authors/tumble/
-// @version      0.1.0.1
+// @version      0.1.1.2
 // @require      https://github.com/tumble1999/mod-utils/raw/master/mod-utils.js
 // @require      https://github.com/tumble1999/modial/raw/master/modial.js
 // @require      https://github.com/tumble1999/critterguration/raw/master/critterguration.user.js
@@ -59,13 +59,12 @@
 		await setup();
 		let not = new Notification("[" + mod.name + "] " + title, {
 			body,
-			icon,
-
+			icon
 		});
 		if (action) not.addEventListener("click", action);
 
 		let btn = document.createElement("button"),
-			listItem = notificationList.addItem(title, "secondary", body, mod.name, "Corner", null, action);
+			listItem = notificationList.addItem({ name: title, color: "secondary", description: body, footer: mod.name, corner: "Corner", onClick: action });
 		listItem.cornerElm.innerText = "";
 		listItem.cornerElm.appendChild(btn);
 		btn.classList.add("btn-close");
