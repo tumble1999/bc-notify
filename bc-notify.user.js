@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         BCNotify
-// @namespace    https://bcmc.ga/authors/tumblegamer/
+// @author       Tumble
+// @namespace    https://bcmc.ga/authors/tumble/
 // @version      0.1.0.1
 // @require      https://github.com/tumble1999/mod-utils/raw/master/mod-utils.js
 // @require      https://github.com/tumble1999/modial/raw/master/modial.js
 // @require      https://github.com/tumble1999/critterguration/raw/master/critterguration.user.js
-// @author       Tumble
 // @match        https://boxcritters.com/play/
 // @match        https://boxcritters.com/play/?*
 // @match        https://boxcritters.com/play/#*
@@ -55,9 +55,9 @@
 		if (Notification.permission !== "granted")
 			return Notification.requestPermission();
 	};
-	async function notify({ title, body, icon, action }) {
+	async function notify({ title, body, icon, action, mod }) {
 		await setup();
-		let not = new Notification(title, {
+		let not = new Notification("[" + mod.name + "] " + title, {
 			body,
 			icon,
 
@@ -65,7 +65,7 @@
 		if (action) not.addEventListener("click", action);
 
 		let btn = document.createElement("button"),
-			listItem = notificationList.addItem(title, "secondary", body, "BCNotify", "Corner", null, action);
+			listItem = notificationList.addItem(title, "secondary", body, mod.name, "Corner", null, action);
 		listItem.cornerElm.innerText = "";
 		listItem.cornerElm.appendChild(btn);
 		btn.classList.add("btn-close");
@@ -73,16 +73,7 @@
 			listItem.remove();
 		});
 	};
-
-	function register({ name }) {
-		return {
-			notify: options => {
-				options.footer = name;
-				notify(options);
-			}
-		};
-	}
-	BCNotify.register = register;
+	BCNotify.notify = notify;
 
 	uWindow.BCNotify = BCNotify;
 })();
